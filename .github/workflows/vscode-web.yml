@@ -62,11 +62,10 @@ jobs:
     steps:
       - name: Pull from GitHub Container Registry
         run: |
-          rm -rf ./vscode-web && mkdir -p ./vscode-web/vscode
-          docker run --rm -v $(pwd)/vscode-web/vscode:/dist ghcr.io/${{ github.repository }}:${{ inputs.artifact-name }}
+          docker run --rm -v $(pwd):/out ghcr.io/${{ github.repository }}:${{ inputs.artifact-name }}
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
-          path: vscode-web
+          path: vscode-web.zip
