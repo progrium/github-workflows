@@ -12,6 +12,9 @@ on:
       pre-build-script:
         required: false
         type: string
+      needs-artifact:
+        required: false
+        type: string
     secrets:
       apple_api_key_id:
         description: App Store Connect API key ID
@@ -53,13 +56,16 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           check-latest: true
 
-      - name: Pre-build script
+      - name: Download ${{ inputs.needs-artifact }} artifact
+        if: ${{ inputs.needs-artifact != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.needs-artifact }}
+          path: _artifact
+
+      - name: Run pre-build script
         if: ${{ inputs.pre-build-script != '' }}
         run: ${{ inputs.pre-build-script }}
-      
-      - name: Test how conditional step looks when false
-        if: ${{ inputs.pre-build-script == '' }}
-        run: echo uh oh
 
       - name: Build project
         run: make dist
@@ -98,7 +104,14 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           check-latest: true
 
-      - name: Pre-build script
+      - name: Download ${{ inputs.needs-artifact }} artifact
+        if: ${{ inputs.needs-artifact != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.needs-artifact }}
+          path: _artifact
+
+      - name: Run pre-build script
         if: ${{ inputs.pre-build-script != '' }}
         run: ${{ inputs.pre-build-script }}
 
@@ -151,7 +164,14 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           check-latest: true
 
-      - name: Pre-build script
+      - name: Download ${{ inputs.needs-artifact }} artifact
+        if: ${{ inputs.needs-artifact != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.needs-artifact }}
+          path: _artifact
+
+      - name: Run pre-build script
         if: ${{ inputs.pre-build-script != '' }}
         run: ${{ inputs.pre-build-script }}
 
@@ -203,7 +223,14 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           check-latest: true
 
-      - name: Pre-build script
+      - name: Download ${{ inputs.needs-artifact }} artifact
+        if: ${{ inputs.needs-artifact != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.needs-artifact }}
+          path: _artifact
+
+      - name: Run pre-build script
         if: ${{ inputs.pre-build-script != '' }}
         run: ${{ inputs.pre-build-script }}
 
