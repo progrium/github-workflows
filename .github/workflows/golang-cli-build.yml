@@ -16,29 +16,12 @@ on:
         required: false
         type: string
     secrets:
-      apple_api_key_id:
-        description: App Store Connect API key ID
-        required: true
-      apple_issuer_id:
-        description: App Store Connect API key issuer ID
-        required: true
-      apple_private_key:
-        description: App Store Connect API private key (base64)
-        required: true
-      apple_signing_certificate:
-        description: Developer signing certificate (base64)
-        required: true
-      apple_signing_password:
-        description: Developer signing certificate password
-        required: true
+      apple_signing_csv:
+        description: Apple developer signing data
 env:
   BIN_NAME: ${{ inputs.bin-name }}
   GO_VERSION: ${{ inputs.go-version }}
-  AC_API_KEY_ID: ${{ secrets.apple_api_key_id }}
-  AC_ISSUER_ID: ${{ secrets.apple_issuer_id }}
-  AC_PRIVATE_KEY: ${{ secrets.apple_private_key }}
-  SIGNING_CERTIFICATE: ${{ secrets.apple_signing_certificate }}
-  SIGNING_CERT_PASSWORD: ${{ secrets.apple_signing_password }}
+  SIGNING_CSV: ${{ secrets.apple_signing_csv }}
 jobs:
   build-windows:
     runs-on: ubuntu-latest
@@ -146,8 +129,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup signing certificate and notarytool
+      - name: Setup Apple signing
         run: |
+          export SIGNING_CERTIFICATE=$(echo "$SIGNING_CSV" | cut -d',' -f1)
+          export SIGNING_CERT_PASSWORD=$(echo "$SIGNING_CSV" | cut -d',' -f2)
+          export AC_API_KEY_ID=$(echo "$SIGNING_CSV" | cut -d',' -f3)
+          export AC_ISSUER_ID=$(echo "$SIGNING_CSV" | cut -d',' -f4)
+          export AC_PRIVATE_KEY=$(echo "$SIGNING_CSV" | cut -d',' -f5)
           echo "$SIGNING_CERTIFICATE" | base64 --decode > cert.p12
           security create-keychain -p "" build.keychain
           security default-keychain -s build.keychain
@@ -205,8 +193,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup signing certificate and notarytool
+      - name: Setup Apple signing
         run: |
+          export SIGNING_CERTIFICATE=$(echo "$SIGNING_CSV" | cut -d',' -f1)
+          export SIGNING_CERT_PASSWORD=$(echo "$SIGNING_CSV" | cut -d',' -f2)
+          export AC_API_KEY_ID=$(echo "$SIGNING_CSV" | cut -d',' -f3)
+          export AC_ISSUER_ID=$(echo "$SIGNING_CSV" | cut -d',' -f4)
+          export AC_PRIVATE_KEY=$(echo "$SIGNING_CSV" | cut -d',' -f5)
           echo "$SIGNING_CERTIFICATE" | base64 --decode > cert.p12
           security create-keychain -p "" build.keychain
           security default-keychain -s build.keychain
