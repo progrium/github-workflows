@@ -36,7 +36,7 @@ env:
 jobs:
   build-windows:
     runs-on: ubuntu-latest
-    name: Build for Windows
+    name: Windows
     env:
       DIST_OS: windows
       DIST_ARCH: arm64 amd64
@@ -73,7 +73,7 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-latest
-    name: Build for Linux
+    name: Linux
     env:
       DIST_OS: linux
       DIST_ARCH: arm64 amd64
@@ -110,7 +110,7 @@ jobs:
 
   build-darwin-arm64:
     runs-on: macos-latest
-    name: Build for Darwin (arm64)
+    name: Darwin (arm64)
     env:
       DIST_OS: darwin
       DIST_ARCH: arm64
@@ -158,7 +158,7 @@ jobs:
 
   build-darwin-amd64:
     runs-on: macos-13
-    name: Build for Darwin (amd64)
+    name: Darwin (amd64)
     env:
       DIST_OS: darwin
       DIST_ARCH: amd64
