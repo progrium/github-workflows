@@ -9,6 +9,9 @@ on:
         required: true
         type: string
         default: '1.23.1'
+      pre-build-script:
+        required: false
+        type: string
     secrets:
       apple_api_key_id:
         description: App Store Connect API key ID
@@ -50,6 +53,14 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           check-latest: true
 
+      - name: Pre-build script
+        if: ${{ inputs.pre-build-script != '' }}
+        run: ${{ inputs.pre-build-script }}
+      
+      - name: Test how conditional step looks when false
+        if: ${{ inputs.pre-build-script == '' }}
+        run: echo uh oh
+
       - name: Build project
         run: make dist
 
@@ -86,6 +97,10 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
           check-latest: true
+
+      - name: Pre-build script
+        if: ${{ inputs.pre-build-script != '' }}
+        run: ${{ inputs.pre-build-script }}
 
       - name: Build project
         run: make dist
@@ -136,10 +151,14 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           check-latest: true
 
+      - name: Pre-build script
+        if: ${{ inputs.pre-build-script != '' }}
+        run: ${{ inputs.pre-build-script }}
+
       - name: Build project
         run: |
-          make build
-          mv ./local/bin/${BIN_NAME} ./${BIN_NAME}
+          make dist
+          mv dist/*_arm64 ./${BIN_NAME}
 
       - name: Sign
         run: |
@@ -184,10 +203,14 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           check-latest: true
 
+      - name: Pre-build script
+        if: ${{ inputs.pre-build-script != '' }}
+        run: ${{ inputs.pre-build-script }}
+
       - name: Build project
         run: |
-          make build
-          mv ./local/bin/${BIN_NAME} ./${BIN_NAME}
+          make dist
+          mv dist/*_amd64 ./${BIN_NAME}
 
       - name: Sign
         run: |
