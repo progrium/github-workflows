@@ -53,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ${{ inputs.path }}
-          build-args: [${{ inputs.version }}]
+          build-args: VERSION=${{ inputs.version }}
           push: true
           tags: ghcr.io/${{ github.repository }}:${{ inputs.artifact-name }}
 
