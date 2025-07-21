@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Windows
     env:
+      DIST_DIR: dist
       DIST_OS: windows
       DIST_ARCH: arm64 amd64
     steps:
@@ -75,6 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Linux
     env:
+      DIST_DIR: dist
       DIST_OS: linux
       DIST_ARCH: arm64 amd64
     steps:
@@ -123,6 +125,7 @@ jobs:
     runs-on: macos-latest
     name: Darwin (arm64)
     env:
+      DIST_DIR: dist
       DIST_OS: darwin
       DIST_ARCH: arm64
     steps:
@@ -187,6 +190,7 @@ jobs:
     runs-on: macos-13
     name: Darwin (amd64)
     env:
+      DIST_DIR: dist
       DIST_OS: darwin
       DIST_ARCH: amd64
     steps:
