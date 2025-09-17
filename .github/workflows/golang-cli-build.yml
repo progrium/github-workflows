@@ -15,6 +15,10 @@ on:
       needs-artifact:
         required: false
         type: string
+      linux-386:
+        required: false
+        type: boolean
+        default: false
     secrets:
       apple_signing_csv:
         description: Apple developer signing data
@@ -78,7 +82,7 @@ jobs:
     env:
       DIST_DIR: dist
       DIST_OS: linux
-      DIST_ARCH: arm64 amd64
+      DIST_ARCH: arm64 amd64${{ inputs.linux-386 && ' 386' || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -119,6 +123,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.BIN_NAME }}-linux-amd64
+          path: ${{ env.BIN_NAME }}
+
+      - name: Prepare 386 artifact
+        if: ${{ inputs.linux-386 }}
+        run: mv dist/*_386 ./${BIN_NAME}
+
+      - name: Upload 386 artifact
+        if: ${{ inputs.linux-386 }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BIN_NAME }}-linux-386
           path: ${{ env.BIN_NAME }}
 
   build-darwin-arm64:
